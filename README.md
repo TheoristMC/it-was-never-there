@@ -41,6 +41,8 @@ It was never there.
 - Items in the player inventory randomly disappearing.
 - Item name on the items inside the player inventory distorts to something unmeaningful.
 
+- If a player continues to experience _the scary experiences_, then each successive experience starts getting harder and scarier.
+
 ## Contributing
 
 1. Clone the repository. 
