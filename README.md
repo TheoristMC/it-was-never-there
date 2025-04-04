@@ -33,11 +33,11 @@ It was never there.
 
 ### Mechanics
 
-- The player speaks/chats to himself following the narrative.
-- The surroundings changes when the player isn't looking.
+- The player speaks/chats to himself following the narrative, mimicking that the player has become mentally disturbed.
+- The surroundings changes when the player isn't looking, there is always a feeling of being watched.
 - There are notebooks or signs that convinces the player that it was never there.
-- Spooky sounds when the player is in a enclosed space.
-- Player must blink every 2-4 seconds.
+- Spooky sounds when the player is in a enclosed space or not.
+- Player must blink every 2-4 seconds or the situation keeps getting worse as the screen becomes blurry.
 - Items in the player inventory randomly disappearing.
 - Item name on the items inside the player inventory distorts to something unmeaningful.
 
