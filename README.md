@@ -44,4 +44,5 @@ It was never there.
 ## Contributing
 
 1. Clone the repository. 
-2. Run `regolith init` on your terminal.
+2. Run both `npm i` and `regolith init` on your terminal.
+3. To save changes, run `regolith run` on your terminal.

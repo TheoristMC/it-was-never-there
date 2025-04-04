@@ -1,0 +1,36 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "It Was Never There (RP)",
+    "description": "A psychological horror add-on for vanilla minecraft.",
+    "uuid": "f83afef1-b54b-4065-904a-626f43f2ebaf",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      21,
+      70
+    ]
+  },
+  "metadata": {
+    "authors": [
+      "Theorist",
+      "LeGend077"
+    ],
+    "license": "MIT"
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "08167c75-e1fc-43f6-9262-aeee3b2f2b65",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}
