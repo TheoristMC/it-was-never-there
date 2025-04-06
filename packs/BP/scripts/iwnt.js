@@ -1,4 +1,10 @@
-import { EntityComponentTypes, system, TicksPerSecond, world } from "@minecraft/server";
+import {
+  EntityComponentTypes,
+  GameMode,
+  system,
+  TicksPerSecond,
+  world,
+} from "@minecraft/server";
 
 function generateRandomTick(min = 10, max = 20) {
   const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -14,12 +20,8 @@ function nameSortAlphabetically(itemName) {
   return itemName
     .replace("minecraft:", "")
     .split("_")
-    .map(word => {
-      const sortedLetters = word
-        .toLowerCase()
-        .split("")
-        .sort()
-        .join("");
+    .map((word) => {
+      const sortedLetters = word.toLowerCase().split("").sort().join("");
       return sortedLetters.charAt(0).toUpperCase() + sortedLetters.slice(1);
     })
     .join(" ");
@@ -30,7 +32,9 @@ world.sendMessage(`${tickSelected / 20} seconds is selected.`);
 
 system.runInterval(() => {
   world.getAllPlayers().forEach((player) => {
-    const inventory = player.getComponent(EntityComponentTypes.Inventory).container;
+    const inventory = player.getComponent(
+      EntityComponentTypes.Inventory
+    ).container;
     const itemHasBeenSelectedSuffix = "§h§a§s§r";
     const itemsArray = [];
 
@@ -40,20 +44,47 @@ system.runInterval(() => {
 
       itemsArray.push({
         slot: i,
-        item
+        item,
       });
     }
 
     if (itemsArray.length === 0) return;
 
     const { item, slot } = getRandomElementInArray(itemsArray);
-    item.nameTag = nameSortAlphabetically(item.typeId) + itemHasBeenSelectedSuffix;
+    item.nameTag =
+      nameSortAlphabetically(item.typeId) + itemHasBeenSelectedSuffix;
     inventory.setItem(slot, item);
   });
 }, tickSelected);
 
-const blinkCooldowns = new Map();
-const cooldownDuration = 1.55;
+const blinkProps = {
+  blinkCooldownsMap: new Map(),
+  blinkCooldownDuration: 1.55, // This must match the full animation length in the UI side
+  notBlinkingLifetime: 8, // How many seconds till player needs to blink again
+};
+
+system.runInterval(() => {
+  world.getAllPlayers().forEach((player) => {
+    const playerBlinkProps = blinkProps.blinkCooldownsMap.get(player.id) || {
+      lastUsed: 0,
+      blinkTime: blinkProps.notBlinkingLifetime,
+    };
+
+    if (player.getGameMode() === GameMode.creative) return;
+
+    playerBlinkProps.blinkTime--;
+
+    if (playerBlinkProps.blinkTime <= (blinkProps.notBlinkingLifetime / 2)) {
+      player.onScreenDisplay.setActionBar("Please blink now.");
+    }
+
+    if (playerBlinkProps.blinkTime <= 0) {
+      player.applyDamage(0.25);
+    }
+
+    blinkProps.blinkCooldownsMap.set(player.id, playerBlinkProps);
+  });
+}, TicksPerSecond);
 
 world.afterEvents.itemUse.subscribe((data) => {
   const { itemStack, source } = data;
@@ -61,11 +92,19 @@ world.afterEvents.itemUse.subscribe((data) => {
   if (itemStack.typeId === "minecraft:compass") {
     const playerId = source.id;
     const timeNow = Date.now();
-    const lastUsed = blinkCooldowns.get(playerId) || 0;
+    const playerBlinkProps = blinkProps.blinkCooldownsMap.get(playerId) || {
+      lastUsed: 0,
+      blinkTime: blinkProps.notBlinkingLifetime,
+    };
 
-    if (timeNow - lastUsed >= (cooldownDuration * 1000)) {
+    if (
+      timeNow - playerBlinkProps.lastUsed >=
+      blinkProps.blinkCooldownDuration * 1000
+    ) {
       source.onScreenDisplay.setTitle("iwnt_blink");
-      blinkCooldowns.set(playerId, timeNow);
+      playerBlinkProps.blinkTime = blinkProps.notBlinkingLifetime;
+      playerBlinkProps.lastUsed = timeNow;
+      blinkProps.blinkCooldownsMap.set(playerId, playerBlinkProps);
     }
   }
 });
