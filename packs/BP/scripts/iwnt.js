@@ -13,11 +13,14 @@ function getRandomElementInArray(arr) {
 function nameSortAlphabetically(itemName) {
   return itemName
     .replace("minecraft:", "")
-    .replaceAll("_", " ")
-    .split(" ")
+    .split("_")
     .map(word => {
-      const [first, ...rest] = word;
-      return [first.toUpperCase(), ...rest].sort().join("");
+      const sortedLetters = word
+        .toLowerCase()
+        .split("")
+        .sort()
+        .join("");
+      return sortedLetters.charAt(0).toUpperCase() + sortedLetters.slice(1);
     })
     .join(" ");
 }
@@ -33,7 +36,7 @@ system.runInterval(() => {
 
     for (let i = 0; i < inventory.size; i++) {
       const item = inventory?.getItem(i);
-      if (!(item || item?.nameTag?.includes(itemHasBeenSelectedSuffix))) continue;
+      if (!item || item.nameTag?.includes(itemHasBeenSelectedSuffix)) continue;
 
       itemsArray.push({
         slot: i,
@@ -41,8 +44,28 @@ system.runInterval(() => {
       });
     }
 
+    if (itemsArray.length === 0) return;
+
     const { item, slot } = getRandomElementInArray(itemsArray);
     item.nameTag = nameSortAlphabetically(item.typeId) + itemHasBeenSelectedSuffix;
     inventory.setItem(slot, item);
   });
 }, tickSelected);
+
+const blinkCooldowns = new Map();
+const cooldownDuration = 1.55;
+
+world.afterEvents.itemUse.subscribe((data) => {
+  const { itemStack, source } = data;
+
+  if (itemStack.typeId === "minecraft:compass") {
+    const playerId = source.id;
+    const timeNow = Date.now();
+    const lastUsed = blinkCooldowns.get(playerId) || 0;
+
+    if (timeNow - lastUsed >= (cooldownDuration * 1000)) {
+      source.onScreenDisplay.setTitle("iwnt_blink");
+      blinkCooldowns.set(playerId, timeNow);
+    }
+  }
+});
