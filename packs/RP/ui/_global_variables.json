@@ -1,0 +1,8 @@
+{
+  "$iwnt:blink_visible_name": "iwnt_blink",
+  "$iwnt:blink_factory_length": "iwnt_blink_1",
+  "$iwnt:blink_update_string": "iwnt_blink_",
+
+  "$iwnt:blur_visible_name": "iwnt_blur",
+  "$iwnt:blur_update_string": "iwnt_blur_"
+}

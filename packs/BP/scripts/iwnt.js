@@ -1,10 +1,11 @@
 import {
   EntityComponentTypes,
-  GameMode,
   system,
   TicksPerSecond,
   world,
 } from "@minecraft/server";
+
+import "./mechanics/blinking.js";
 
 function generateRandomTick(min = 10, max = 20) {
   const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -56,55 +57,3 @@ system.runInterval(() => {
     inventory.setItem(slot, item);
   });
 }, tickSelected);
-
-const blinkProps = {
-  blinkCooldownsMap: new Map(),
-  blinkCooldownDuration: 1.55, // This must match the full animation length in the UI side
-  notBlinkingLifetime: 8, // How many seconds till player needs to blink again
-};
-
-system.runInterval(() => {
-  world.getAllPlayers().forEach((player) => {
-    const playerBlinkProps = blinkProps.blinkCooldownsMap.get(player.id) || {
-      lastUsed: 0,
-      blinkTime: blinkProps.notBlinkingLifetime,
-    };
-
-    if (player.getGameMode() === GameMode.creative) return;
-
-    playerBlinkProps.blinkTime--;
-
-    if (playerBlinkProps.blinkTime <= (blinkProps.notBlinkingLifetime / 2)) {
-      player.onScreenDisplay.setActionBar("Please blink now.");
-    }
-
-    if (playerBlinkProps.blinkTime <= 0) {
-      player.applyDamage(0.25);
-    }
-
-    blinkProps.blinkCooldownsMap.set(player.id, playerBlinkProps);
-  });
-}, TicksPerSecond);
-
-world.afterEvents.itemUse.subscribe((data) => {
-  const { itemStack, source } = data;
-
-  if (itemStack.typeId === "minecraft:compass") {
-    const playerId = source.id;
-    const timeNow = Date.now();
-    const playerBlinkProps = blinkProps.blinkCooldownsMap.get(playerId) || {
-      lastUsed: 0,
-      blinkTime: blinkProps.notBlinkingLifetime,
-    };
-
-    if (
-      timeNow - playerBlinkProps.lastUsed >=
-      blinkProps.blinkCooldownDuration * 1000
-    ) {
-      source.onScreenDisplay.setTitle("iwnt_blink");
-      playerBlinkProps.blinkTime = blinkProps.notBlinkingLifetime;
-      playerBlinkProps.lastUsed = timeNow;
-      blinkProps.blinkCooldownsMap.set(playerId, playerBlinkProps);
-    }
-  }
-});

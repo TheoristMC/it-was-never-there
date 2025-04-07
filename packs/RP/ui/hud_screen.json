@@ -1,55 +1,98 @@
 {
-  "iwnt_blink_mechanic_appear": {
-    "anim_type": "alpha",
-    "easing": "in_cubic",
-    "from": 0.0,
-    "to": 1.0,
-    "duration": 0.55,
-    "next": "@hud.iwnt_blink_mechanic_wait"
+  "iwnt_blink_lid_move": {
+    "anim_type": "offset",
+    "easing": "out_sine",
+    "from": "$from_lid_offset",
+    "to": "$to_lid_offset",
+    "duration": 0.95
   },
-  "iwnt_blink_mechanic_wait": {
+  "iwnt_blink_lid_wait_move": {
     "anim_type": "wait",
-    "duration": 0.65,
-    "next": "@hud.iwnt_blink_mechanic_disappear"
+    "duration": 1.25,
+    "next": "@hud.iwnt_blink_lid_disappear"
   },
-  "iwnt_blink_mechanic_disappear": {
-    "anim_type": "alpha",
-    "easing": "out_cubic",
-    "from": 1.0,
-    "to": 0.0,
-    "duration": 0.35,
-    "destroy_at_end": "iwnt_blink_mechanic"
+  "iwnt_blink_lid_disappear": {
+    "anim_type": "offset",
+    "easing": "in_sine",
+    "from": "$to_lid_offset",
+    "to": "$from_lid_offset",
+    "duration": 0.95,
+    "destroy_at_end": "$destroy_name"
   },
   "iwnt_blink_mechanic": {
-    "type": "image",
-    "texture": "textures/ui/Black",
+    "type": "panel",
     "size": [
       "100%",
       "100%"
     ],
-    "anims": [
-      "@hud.iwnt_blink_mechanic_appear"
-    ],
-    "bindings": [
+    "controls": [
       {
-        "binding_name": "#hud_title_text_string",
-        "binding_type": "global"
+        "blink_top_lid": {
+          "type": "image",
+          "texture": "textures/ui/Black",
+          "size": [
+            "100%",
+            "50%"
+          ],
+          "anchor_from": "top_middle",
+          "anchor_to": "top_middle",
+          "$destroy_name": "blink_top_lid",
+          "$from_lid_offset": [
+            0,
+            "-75%"
+          ],
+          "$to_lid_offset": [
+            0,
+            0
+          ],
+          "anims": [
+            "@hud.iwnt_blink_lid_move",
+            "@hud.iwnt_blink_lid_wait_move"
+          ]
+        }
       },
       {
-        "binding_type": "view",
-        "source_property_name": "(#hud_title_text_string = 'iwnt_blink')",
-        "target_property_name": "#visible"
+        "blink_bottom_lid": {
+          "type": "image",
+          "texture": "textures/ui/Black",
+          "size": [
+            "100%",
+            "50%"
+          ],
+          "anchor_from": "bottom_middle",
+          "anchor_to": "bottom_middle",
+          "$destroy_name": "blink_bottom_lid",
+          "$from_lid_offset": [
+            0,
+            "75%"
+          ],
+          "$to_lid_offset": [
+            0,
+            0
+          ],
+          "anims": [
+            "@hud.iwnt_blink_lid_move",
+            "@hud.iwnt_blink_lid_wait_move"
+          ]
+        }
       }
     ]
   },
   "iwnt_blink_factory": {
-    "type": "panel",
+    "type": "collection_panel",
     "factory": {
-      "name": "hud_title_text_factory",
-      "control_ids": {
-        "hud_title_text": "iwnt_blink_mechanic@hud.iwnt_blink_mechanic"
+      "name": "iwnt_blink_factory",
+      "control_name": "iwnt_blink_mechanic@hud.iwnt_blink_mechanic"
+    },
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_control_name": "iwnt_blink_data_control",
+        "source_property_name": "((#preserved_text = $iwnt:blink_factory_length) * 1)",
+        "target_property_name": "#collection_length",
+        "resolve_sibling_scope": true
       }
-    }
+    ]
   },
   "hud_title_text/title_frame/title": {
     "modifications": [
@@ -59,14 +102,96 @@
         "value": [
           {
             "binding_type": "view",
-            "source_property_name": "(not (#text = 'iwnt_blink'))",
+            "source_property_name": "((#text - $iwnt:blink_visible_name - $iwnt:blur_visible_name) = #text)",
             "target_property_name": "#visible"
           }
         ]
       }
     ]
   },
+  "iwnt_blur_image": {
+    "type": "image",
+    "texture": "textures/ui/Black",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "controls": [
+      {
+        "iwnt_blur_data_control": {
+          "type": "panel",
+          "property_bag": {
+            "#max_blur_alpha": 20.0
+          },
+          "bindings": [
+            {
+              "binding_name": "#hud_title_text_string"
+            },
+            {
+              "binding_name": "#hud_title_text_string",
+              "binding_name_override": "#preserved_text",
+              "binding_condition": "visibility_changed"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $iwnt:blur_update_string) = #hud_title_text_string))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      }
+    ],
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_control_name": "iwnt_blur_data_control",
+        "source_property_name": "(((#preserved_text - $iwnt:blur_update_string) + 0) / #max_blur_alpha)",
+        "target_property_name": "#alpha"
+      }
+    ]
+  },
+  "hud_screen_bg_content": {
+    "type": "panel",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "controls": [
+      {
+        "blink_mechanic_factory@hud.iwnt_blink_factory": {}
+      },
+      {
+        "iwnt_blink_data_control": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#hud_title_text_string"
+            },
+            {
+              "binding_name": "#hud_title_text_string",
+              "binding_name_override": "#preserved_text",
+              "binding_condition": "visibility_changed"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $iwnt:blink_update_string) = #hud_title_text_string))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      },
+      {
+        "blur_mechanic_image@hud.iwnt_blur_image": {}
+      }
+    ],
+    "bindings": [
+      {
+        "binding_name": "(not #on_new_death_screen)",
+        "binding_name_override": "#visible"
+      }
+    ]
+  },
   "hud_screen": {
-    "$screen_bg_content": "hud.iwnt_blink_factory"
+    "$screen_bg_content": "hud.hud_screen_bg_content"
   }
 }
