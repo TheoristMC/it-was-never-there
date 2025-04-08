@@ -120,9 +120,6 @@
       {
         "iwnt_blur_data_control": {
           "type": "panel",
-          "property_bag": {
-            "#max_blur_alpha": 20.0
-          },
           "bindings": [
             {
               "binding_name": "#hud_title_text_string"
@@ -141,11 +138,29 @@
         }
       }
     ],
+    "property_bag": {
+      "#alpha_normalizer": 1.0
+    },
     "bindings": [
       {
         "binding_type": "view",
         "source_control_name": "iwnt_blur_data_control",
-        "source_property_name": "(((#preserved_text - $iwnt:blur_update_string) + 0) / #max_blur_alpha)",
+        "source_property_name": "#preserved_text",
+        "target_property_name": "#preserved_text"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((#preserved_text - $iwnt:blur_update_string) + 0)",
+        "target_property_name": "#dividend"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((#preserved_text - ($iwnt:blur_update_string + #dividend + '_')) + 0)",
+        "target_property_name": "#divisor"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(#dividend / (#divisor * #alpha_normalizer))",
         "target_property_name": "#alpha"
       }
     ]

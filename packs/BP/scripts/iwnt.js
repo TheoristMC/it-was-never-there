@@ -41,7 +41,7 @@ system.runInterval(() => {
 
     for (let i = 0; i < inventory.size; i++) {
       const item = inventory?.getItem(i);
-      if (!item || item.nameTag?.includes(itemHasBeenSelectedSuffix)) continue;
+      if (!item || item.nameTag?.includes(itemHasBeenSelectedSuffix) || i <= 8) continue;
 
       itemsArray.push({
         slot: i,

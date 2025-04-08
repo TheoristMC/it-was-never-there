@@ -4,8 +4,8 @@ const blinkProps = {
   blinkCooldownsMap: new Map(),
   blinkCooldownDuration: 2.2, // This must match the full animation length in the UI side
   blinkBlurLifetime: 1.2, // How long should the blur last after the player has blink, this is aligned when the player fully closed his eyes
-  notBlinkingLifetime: 5, // How many seconds till player needs to blink again
-  maximumBlur: 19, // Maximum blur in seconds before the player blinks
+  notBlinkingLifetime: 8, // How many seconds till player needs to blink again
+  maximumBlur: 20, // Maximum blur in seconds before the player blinks
 };
 
 function playerBlink(player) {
@@ -43,16 +43,19 @@ system.runInterval(() => {
     };
     const blinkTime = playerBlinkProps.blinkTime;
 
-    if (player.getGameMode() === GameMode.creative) return;
+    if (player.getGameMode() !== GameMode.survival) return;
 
-    if (blinkTime === -blinkProps.maximumBlur) {
+    const maximumBlur = blinkProps.maximumBlur - 1; // We don't want to fully blacken the player screen
+    if (blinkTime < -maximumBlur) {
       playerBlink(player);
       return;
     }
 
     playerBlinkProps.blinkTime--;
     if (blinkTime <= 0) {
-      player.onScreenDisplay.setTitle(`iwnt_blur_${Math.abs(blinkTime)}`);
+      player.onScreenDisplay.setTitle(
+        `iwnt_blur_${Math.abs(blinkTime)}_${blinkProps.maximumBlur}`
+      );
     }
 
     blinkProps.blinkCooldownsMap.set(player.id, playerBlinkProps);

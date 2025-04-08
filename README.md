@@ -31,6 +31,8 @@ There’s nothing in your inventory. No logs. No planks. No wool.
 It was like...<br>
 It was never there.
 
+## SPOILER
+
 ### Mechanics
 
 - The player speaks/chats to himself following the narrative, mimicking that the player has become mentally disturbed.
@@ -38,9 +40,11 @@ It was never there.
 - There are notebooks or signs that convinces the player that it was never there.
 - Spooky sounds when the player is in a enclosed space or not.
 - Player must blink every 8 seconds or the situation keeps getting worse as the screen becomes blurry.
-  - After 19 seconds, player will be forced to blink.
+  - After 20 seconds, player will be forced to blink.
+  - Blur only works on survival but you can still blink on any gamemodes.
 - Items in the player inventory randomly disappearing.
 - Item name on the items inside the player inventory distorts to something unmeaningful.
+  - This only works on inventory, not on the hotbar so player can't see it happening live.
 
 - If a player continues to experience _the scary experiences_, then each successive experience starts getting harder and scarier.
 
