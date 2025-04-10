@@ -1,0 +1,10 @@
+Needs fixing:
+
+- Look Detector entity doesn't emit any events.
+- After dying/sleeping, the blur doesn't reset. (FIXED)
+- Changing between gamemodes doesn't reset blur. (FIXED)
+
+Changelog (April 8)
+
+- Added a Look Detector
+- Fixed issues to blinking

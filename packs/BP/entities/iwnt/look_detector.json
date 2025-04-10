@@ -1,0 +1,43 @@
+{
+  "format_version": "1.21.60",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "iwnt:is_looking_detector",
+      "is_spawnable": false,
+      "is_summonable": true
+    },
+    "components": {
+      "minecraft:damage_sensor": {
+        "triggers": [
+          {
+            "cause": "all",
+            "deals_damage": "no"
+          }
+        ]
+      },
+      "minecraft:collision_box": {
+        "height": 1,
+        "width": 1
+      },
+      "minecraft:looked_at": {
+        "search_radius": 14,
+        "line_of_sight_obstruction_type": "collision_for_camera",
+        "field_of_view": 120,
+        "scale_fov_by_distance": false,
+        "looked_at_event": {
+          "event": "iwnt:is_being_look_at",
+          "target": "self"
+        },
+        "not_looked_at_event": {
+          "event": "iwnt:is_not_being_look_at",
+          "target": "self"
+        },
+        "set_target": "never"
+      }
+    },
+    "events": {
+      "iwnt:is_being_look_at": {},
+      "iwnt:is_not_being_look_at": {}
+    }
+  }
+}

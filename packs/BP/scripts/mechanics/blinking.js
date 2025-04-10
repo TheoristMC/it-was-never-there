@@ -1,4 +1,10 @@
-import { GameMode, world, system, TicksPerSecond } from "@minecraft/server";
+import {
+  GameMode,
+  world,
+  system,
+  TicksPerSecond,
+  EntityComponentTypes,
+} from "@minecraft/server";
 
 const blinkProps = {
   blinkCooldownsMap: new Map(),
@@ -8,12 +14,22 @@ const blinkProps = {
   maximumBlur: 20, // Maximum blur in seconds before the player blinks
 };
 
+// Had to make a function because it might get repetetive later on...
+const resetBlur = (player) => {
+  const playerBlinkProps = blinkProps.blinkCooldownsMap.get(player.id) || {
+    blinkTime: blinkProps.notBlinkingLifetime,
+  };
+
+  player.onScreenDisplay.setTitle("iwnt_blur_0");
+  playerBlinkProps.blinkTime = blinkProps.notBlinkingLifetime;
+  blinkProps.blinkCooldownsMap.set(player.id, playerBlinkProps);
+};
+
 function playerBlink(player) {
   const playerId = player.id;
   const timeNow = Date.now();
   const playerBlinkProps = blinkProps.blinkCooldownsMap.get(playerId) || {
-    lastUsed: 0,
-    blinkTime: blinkProps.notBlinkingLifetime,
+    lastUsed: 0
   };
 
   if (
@@ -26,11 +42,10 @@ function playerBlink(player) {
       blinkProps.blinkCooldownDuration * TicksPerSecond
     );
     system.runTimeout(
-      () => player.onScreenDisplay.setTitle("iwnt_blur_0"),
+      () => resetBlur(player),
       blinkProps.blinkBlurLifetime * TicksPerSecond
     );
     playerBlinkProps.lastUsed = timeNow;
-    playerBlinkProps.blinkTime = blinkProps.notBlinkingLifetime;
     blinkProps.blinkCooldownsMap.set(playerId, playerBlinkProps);
   }
 }
@@ -38,12 +53,13 @@ function playerBlink(player) {
 system.runInterval(() => {
   world.getAllPlayers().forEach((player) => {
     const playerBlinkProps = blinkProps.blinkCooldownsMap.get(player.id) || {
+      needsReset: false,
       lastUsed: 0,
       blinkTime: blinkProps.notBlinkingLifetime,
     };
     const blinkTime = playerBlinkProps.blinkTime;
 
-    if (player.getGameMode() !== GameMode.survival) return;
+    if (playerBlinkProps.needsReset) return;
 
     const maximumBlur = blinkProps.maximumBlur - 1; // We don't want to fully blacken the player screen
     if (blinkTime < -maximumBlur) {
@@ -62,10 +78,33 @@ system.runInterval(() => {
   });
 }, TicksPerSecond);
 
+// Needs to be in another interval since the other one runs every seconds leading for it to be delayed
+system.runInterval(() => {
+  world.getAllPlayers().forEach((player) => {
+    const playerBlinkProps = blinkProps.blinkCooldownsMap.get(player.id) || {
+      needsReset: false,
+    };
+
+    const playerHealth = player.getComponent(
+      EntityComponentTypes.Health
+    ).currentValue;
+
+    if (
+      player.getGameMode() !== GameMode.survival ||
+      player.isSleeping ||
+      playerHealth <= 0
+    ) {
+      playerBlinkProps.needsReset = true;
+      resetBlur(player);
+      return;
+    }
+
+    playerBlinkProps.needsReset = false;
+  });
+});
+
 world.afterEvents.itemUse.subscribe((data) => {
   const { itemStack, source } = data;
 
   if (itemStack.typeId === "minecraft:compass") playerBlink(source);
 });
-
-// TODO: RESET PLAYER BLINK AFTER DYING

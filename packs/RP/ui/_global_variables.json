@@ -1,4 +1,8 @@
 {
+  // BLINKING SYSTEM:
+  
+  // BEWARE OF CHANGING THESE VALUES AS THEY NEED TO BE PERFECTLY ALIGNED WITH SCRIPTS
+  // SO IF YOU DON'T KNOW WHAT YOU"RE EDITING, DON'T MODIFY!
   "$iwnt:blink_visible_name": "iwnt_blink",
   "$iwnt:blink_factory_length": "iwnt_blink_1",
   "$iwnt:blink_update_string": "iwnt_blink_",

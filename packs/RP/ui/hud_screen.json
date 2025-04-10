@@ -16,8 +16,7 @@
     "easing": "in_sine",
     "from": "$to_lid_offset",
     "to": "$from_lid_offset",
-    "duration": 0.95,
-    "destroy_at_end": "$destroy_name"
+    "duration": 0.95
   },
   "iwnt_blink_mechanic": {
     "type": "panel",
@@ -36,7 +35,6 @@
           ],
           "anchor_from": "top_middle",
           "anchor_to": "top_middle",
-          "$destroy_name": "blink_top_lid",
           "$from_lid_offset": [
             0,
             "-75%"
@@ -61,7 +59,6 @@
           ],
           "anchor_from": "bottom_middle",
           "anchor_to": "bottom_middle",
-          "$destroy_name": "blink_bottom_lid",
           "$from_lid_offset": [
             0,
             "75%"
