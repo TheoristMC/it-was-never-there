@@ -27,14 +27,14 @@ const resetBlur = (player) => {
 
 function playerBlink(player) {
   const playerId = player.id;
-  const timeNow = Date.now();
+  const timeNow = system.currentTick;
   const playerBlinkProps = blinkProps.blinkCooldownsMap.get(playerId) || {
-    lastUsed: 0
+    lastUsed: 0,
   };
 
   if (
     timeNow - playerBlinkProps.lastUsed >=
-    blinkProps.blinkCooldownDuration * 1000
+    blinkProps.blinkCooldownDuration * TicksPerSecond
   ) {
     player.onScreenDisplay.setTitle("iwnt_blink_1");
     system.runTimeout(
