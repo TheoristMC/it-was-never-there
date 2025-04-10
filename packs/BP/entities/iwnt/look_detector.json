@@ -15,11 +15,20 @@
           }
         ]
       },
+      "minecraft:physics": {
+        "has_collision": false,
+        "has_gravity": false
+      },
+      "minecraft:pushable": {
+        "is_pushable": false,
+        "is_pushable_by_piston": true
+      },
       "minecraft:looked_at": {
-        "search_radius": 14,
+        "search_radius": 26,
         "line_of_sight_obstruction_type": "collision_for_camera",
         "field_of_view": 120,
-        "scale_fov_by_distance": false,
+        "find_players_only": true,
+        "scale_fov_by_distance": true,
         "looked_at_event": {
           "event": "iwnt:is_being_look_at",
           "target": "self"
