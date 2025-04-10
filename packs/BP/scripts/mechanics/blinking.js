@@ -16,21 +16,27 @@ const blinkProps = {
 
 // Had to make a function because it might get repetetive later on...
 const resetBlur = (player) => {
-  const playerBlinkProps = blinkProps.blinkCooldownsMap.get(player.id) || {
-    blinkTime: blinkProps.notBlinkingLifetime,
-  };
+  const playerBlinkProps = getPlayerBlinkProps(player);
 
   player.onScreenDisplay.setTitle("iwnt_blur_0");
   playerBlinkProps.blinkTime = blinkProps.notBlinkingLifetime;
   blinkProps.blinkCooldownsMap.set(player.id, playerBlinkProps);
 };
 
+const getPlayerBlinkProps = (player) => {
+  const playerBlinkProps = blinkProps.blinkCooldownsMap.get(player.id) || {
+    needsReset: false,
+    lastUsed: 0,
+    blinkTime: blinkProps.notBlinkingLifetime,
+  };
+
+  return playerBlinkProps;
+};
+
 function playerBlink(player) {
   const playerId = player.id;
   const timeNow = system.currentTick;
-  const playerBlinkProps = blinkProps.blinkCooldownsMap.get(playerId) || {
-    lastUsed: 0,
-  };
+  const playerBlinkProps = getPlayerBlinkProps(player);
 
   if (
     timeNow - playerBlinkProps.lastUsed >=
@@ -46,17 +52,14 @@ function playerBlink(player) {
       blinkProps.blinkBlurLifetime * TicksPerSecond
     );
     playerBlinkProps.lastUsed = timeNow;
-    blinkProps.blinkCooldownsMap.set(playerId, playerBlinkProps);
   }
+
+  blinkProps.blinkCooldownsMap.set(playerId, playerBlinkProps);
 }
 
 system.runInterval(() => {
   world.getAllPlayers().forEach((player) => {
-    const playerBlinkProps = blinkProps.blinkCooldownsMap.get(player.id) || {
-      needsReset: false,
-      lastUsed: 0,
-      blinkTime: blinkProps.notBlinkingLifetime,
-    };
+    const playerBlinkProps = getPlayerBlinkProps(player);
     const blinkTime = playerBlinkProps.blinkTime;
 
     if (playerBlinkProps.needsReset) return;
@@ -81,9 +84,7 @@ system.runInterval(() => {
 // Needs to be in another interval since the other one runs every seconds leading for it to be delayed
 system.runInterval(() => {
   world.getAllPlayers().forEach((player) => {
-    const playerBlinkProps = blinkProps.blinkCooldownsMap.get(player.id) || {
-      needsReset: false,
-    };
+    const playerBlinkProps = getPlayerBlinkProps(player);
 
     const playerHealth = player.getComponent(
       EntityComponentTypes.Health

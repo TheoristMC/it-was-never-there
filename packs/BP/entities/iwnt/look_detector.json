@@ -15,10 +15,6 @@
           }
         ]
       },
-      "minecraft:collision_box": {
-        "height": 1,
-        "width": 1
-      },
       "minecraft:looked_at": {
         "search_radius": 14,
         "line_of_sight_obstruction_type": "collision_for_camera",
