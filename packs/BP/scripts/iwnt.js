@@ -57,11 +57,3 @@ system.runInterval(() => {
     inventory.setItem(slot, item);
   });
 }, tickSelected);
-
-world.afterEvents.dataDrivenEntityTrigger.subscribe((data) => {
-  const { entity, eventId } = data;
-
-  if (entity.typeId === "iwnt:is_looking_detector") {
-    console.warn(eventId);
-  }
-});

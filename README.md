@@ -37,6 +37,9 @@ It was never there.
 
 - The player speaks/chats to himself following the narrative, mimicking that the player has become mentally disturbed.
 - The surroundings changes when the player isn't looking, there is always a feeling of being watched.
+  - Things that are being checked:
+  1. Last 25 blocks placed by the player.
+  2. Last 12 containers interacted by the player.
 - There are notebooks or signs that convinces the player that it was never there.
 - Spooky sounds when the player is in a enclosed space or not.
 - Player must blink every 8 seconds or the situation keeps getting worse as the screen becomes blurry.

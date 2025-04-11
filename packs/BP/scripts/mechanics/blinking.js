@@ -23,15 +23,12 @@ const resetBlur = (player) => {
   blinkProps.blinkCooldownsMap.set(player.id, playerBlinkProps);
 };
 
-const getPlayerBlinkProps = (player) => {
-  const playerBlinkProps = blinkProps.blinkCooldownsMap.get(player.id) || {
+const getPlayerBlinkProps = (player) =>
+  blinkProps.blinkCooldownsMap.get(player.id) || {
     needsReset: false,
     lastUsed: 0,
     blinkTime: blinkProps.notBlinkingLifetime,
   };
-
-  return playerBlinkProps;
-};
 
 function playerBlink(player) {
   const playerId = player.id;
