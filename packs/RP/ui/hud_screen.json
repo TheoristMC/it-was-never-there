@@ -22,9 +22,7 @@
     ],
     "controls": [
       {
-        "blink_mechanic_factory@iwnt_blink_mechanic.iwnt_blink_factory": {
-          "layer": 1 // Above the randomHUDMsg mechanic
-        }
+        "blink_mechanic_factory@iwnt_blink_mechanic.iwnt_blink_factory": {}
       },
       {
         "iwnt_blink_data_control@iwnt_blink_mechanic.iwnt_blink_data_control": {}

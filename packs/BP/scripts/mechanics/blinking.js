@@ -9,7 +9,8 @@ import {
 const blinkProps = {
   blinkCooldownsMap: new Map(),
   blinkCooldownDuration: 2.2, // This must match the full animation length in the UI side
-  blinkBlurLifetime: 1.2, // How long should the blur last after the player has blink, this is aligned when the player fully closed his eyes
+  blinkBlurLifetime: 0.95, // How long should the blur last after the player has blink, this is aligned when the player fully closed his eyes
+  blinkWaitLifetime: 1.25, // How long the full blink wait duration
   notBlinkingLifetime: 8, // How many seconds till player needs to blink again
   maximumBlur: 20, // Maximum blur in seconds before the player blinks
 };
@@ -26,6 +27,7 @@ const resetBlur = (player) => {
 const getPlayerBlinkProps = (player) =>
   blinkProps.blinkCooldownsMap.get(player.id) || {
     needsReset: false,
+    isFullyBlinked: false,
     lastUsed: 0,
     blinkTime: blinkProps.notBlinkingLifetime,
   };
@@ -40,13 +42,16 @@ function playerBlink(player) {
     blinkProps.blinkCooldownDuration * TicksPerSecond
   ) {
     player.onScreenDisplay.setTitle("iwnt_blink_1");
+    system.runTimeout(() => {
+      player.onScreenDisplay.setTitle("iwnt_blink_0");
+    }, blinkProps.blinkCooldownDuration * TicksPerSecond);
+    system.runTimeout(() => {
+      playerBlinkProps.isFullyBlinked = true;
+      resetBlur(player);
+    }, blinkProps.blinkBlurLifetime * TicksPerSecond);
     system.runTimeout(
-      () => player.onScreenDisplay.setTitle("iwnt_blink_0"),
-      blinkProps.blinkCooldownDuration * TicksPerSecond
-    );
-    system.runTimeout(
-      () => resetBlur(player),
-      blinkProps.blinkBlurLifetime * TicksPerSecond
+      () => (playerBlinkProps.isFullyBlinked = false),
+      blinkProps.blinkWaitLifetime * TicksPerSecond
     );
     playerBlinkProps.lastUsed = timeNow;
   }
@@ -101,9 +106,11 @@ system.runInterval(() => {
 
     // Reset the blur if the blinkTime is also resetted
     // This prevents the blur from showing after /reload
-    // Although some random errors are happening so..
-    // if (playerBlinkProps.blinkTime === blinkProps.notBlinkingLifetime)
-    //   resetBlur(player);
+    if (
+      playerBlinkProps.lastUsed === 0 &&
+      playerBlinkProps.blinkTime === blinkProps.notBlinkingLifetime
+    )
+      resetBlur(player);
   });
 });
 
