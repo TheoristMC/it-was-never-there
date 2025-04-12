@@ -1,0 +1,169 @@
+{
+  "namespace": "iwnt_blink_mechanic",
+  "iwnt_blink_lid_move": {
+    "anim_type": "offset",
+    "easing": "out_sine",
+    "from": "$from_lid_offset",
+    "to": "$to_lid_offset",
+    "duration": 0.95
+  },
+  "iwnt_blink_lid_wait_move": {
+    "anim_type": "wait",
+    "duration": 1.25,
+    "next": "@iwnt_blink_mechanic.iwnt_blink_lid_disappear"
+  },
+  "iwnt_blink_lid_disappear": {
+    "anim_type": "offset",
+    "easing": "in_sine",
+    "from": "$to_lid_offset",
+    "to": "$from_lid_offset",
+    "duration": 0.95
+  },
+  "iwnt_blink_mechanic": {
+    "type": "panel",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "controls": [
+      {
+        "blink_top_lid": {
+          "type": "image",
+          "texture": "textures/ui/Black",
+          "size": [
+            "100%",
+            "50%"
+          ],
+          "anchor_from": "top_middle",
+          "anchor_to": "top_middle",
+          "$from_lid_offset": [
+            0,
+            "-75%"
+          ],
+          "$to_lid_offset": [
+            0,
+            0
+          ],
+          "anims": [
+            "@iwnt_blink_mechanic.iwnt_blink_lid_move",
+            "@iwnt_blink_mechanic.iwnt_blink_lid_wait_move"
+          ]
+        }
+      },
+      {
+        "blink_bottom_lid": {
+          "type": "image",
+          "texture": "textures/ui/Black",
+          "size": [
+            "100%",
+            "50%"
+          ],
+          "anchor_from": "bottom_middle",
+          "anchor_to": "bottom_middle",
+          "$from_lid_offset": [
+            0,
+            "75%"
+          ],
+          "$to_lid_offset": [
+            0,
+            0
+          ],
+          "anims": [
+            "@iwnt_blink_mechanic.iwnt_blink_lid_move",
+            "@iwnt_blink_mechanic.iwnt_blink_lid_wait_move"
+          ]
+        }
+      }
+    ]
+  },
+  "iwnt_blink_factory": {
+    "type": "collection_panel",
+    "factory": {
+      "name": "iwnt_blink_factory",
+      "control_name": "iwnt_blink_mechanic@iwnt_blink_mechanic.iwnt_blink_mechanic"
+    },
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_control_name": "iwnt_blink_data_control",
+        "source_property_name": "((#preserved_text = $iwnt:blink_factory_length) * 1)",
+        "target_property_name": "#collection_length",
+        "resolve_sibling_scope": true
+      }
+    ]
+  },
+  "iwnt_blink_data_control": {
+    "type": "panel",
+    "bindings": [
+      {
+        "binding_name": "#hud_title_text_string"
+      },
+      {
+        "binding_name": "#hud_title_text_string",
+        "binding_name_override": "#preserved_text",
+        "binding_condition": "visibility_changed"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $iwnt:blink_update_string) = #hud_title_text_string))",
+        "target_property_name": "#visible"
+      }
+    ]
+  },
+  "iwnt_blur_image": {
+    "type": "image",
+    "texture": "textures/ui/Black",
+    "size": [
+      "100%",
+      "100%"
+    ],
+    "controls": [
+      {
+        "iwnt_blur_data_control": {
+          "type": "panel",
+          "bindings": [
+            {
+              "binding_name": "#hud_title_text_string"
+            },
+            {
+              "binding_name": "#hud_title_text_string",
+              "binding_name_override": "#preserved_text",
+              "binding_condition": "visibility_changed"
+            },
+            {
+              "binding_type": "view",
+              "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $iwnt:blur_update_string) = #hud_title_text_string))",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      }
+    ],
+    "property_bag": {
+      "#alpha_normalizer": 1.0
+    },
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_control_name": "iwnt_blur_data_control",
+        "source_property_name": "#preserved_text",
+        "target_property_name": "#preserved_text"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((#preserved_text - $iwnt:blur_update_string) + 0)",
+        "target_property_name": "#dividend"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "((#preserved_text - ($iwnt:blur_update_string + #dividend + '_')) + 0)",
+        "target_property_name": "#divisor"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(#dividend / (#divisor * #alpha_normalizer))",
+        "target_property_name": "#alpha"
+      }
+    ]
+  }
+}

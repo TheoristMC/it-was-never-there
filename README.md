@@ -48,6 +48,9 @@ It was never there.
 - Items in the player inventory randomly disappearing.
 - Item name on the items inside the player inventory distorts to something unmeaningful.
   - This only works on inventory, not on the hotbar so player can't see it happening live.
+- Random text showing in player HUD.
+- Items can randomly turn into rotten flesh or something useless.
+
 
 - If a player continues to experience _the scary experiences_, then each successive experience starts getting harder and scarier.
 

@@ -98,6 +98,12 @@ system.runInterval(() => {
     }
 
     playerBlinkProps.needsReset = false;
+
+    // Reset the blur if the blinkTime is also resetted
+    // This prevents the blur from showing after /reload
+    // Although some random errors are happening so..
+    // if (playerBlinkProps.blinkTime === blinkProps.notBlinkingLifetime)
+    //   resetBlur(player);
   });
 });
 
