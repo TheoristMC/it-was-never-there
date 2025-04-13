@@ -2,6 +2,7 @@ import { TicksPerSecond } from "@minecraft/server";
 
 import "./mechanics/blinking.js";
 import "./mechanics/random-hud-msg.js";
+// import "./mechanics/item-transform-to-useless.js"; | Needs more development
 // import "./mechanics/item-name-distortion.js"; | Needs more development
 
 function generateRandomTick(min, max) {

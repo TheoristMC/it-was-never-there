@@ -1,5 +1,4 @@
 import { world, system, EntityComponentTypes } from "@minecraft/server";
-
 import { generateRandomTick, getRandomElementInArray } from "../iwnt";
 
 function nameSortAlphabetically(itemName) {

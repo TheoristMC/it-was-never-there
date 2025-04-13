@@ -32,6 +32,18 @@ const getPlayerBlinkProps = (player) =>
     blinkTime: blinkProps.notBlinkingLifetime,
   };
 
+// Reset the blur if the blinkTime is also resetted
+// This prevents the blur from showing after /reload
+world.getAllPlayers().forEach((player) => {
+  const playerBlinkProps = getPlayerBlinkProps(player);
+
+  if (
+    playerBlinkProps.lastUsed === 0 &&
+    playerBlinkProps.blinkTime === blinkProps.notBlinkingLifetime
+  )
+    resetBlur(player);
+});
+
 function playerBlink(player) {
   const playerId = player.id;
   const timeNow = system.currentTick;
@@ -92,25 +104,19 @@ system.runInterval(() => {
       EntityComponentTypes.Health
     ).currentValue;
 
-    if (
+    const isInvalidState =
       player.getGameMode() !== GameMode.survival ||
       player.isSleeping ||
-      playerHealth <= 0
-    ) {
+      playerHealth <= 0;
+
+    if (isInvalidState) {
+      if (!playerBlinkProps.needsReset) resetBlur(player); // Run it only once so other titles can run too
+
       playerBlinkProps.needsReset = true;
-      resetBlur(player);
       return;
     }
 
     playerBlinkProps.needsReset = false;
-
-    // Reset the blur if the blinkTime is also resetted
-    // This prevents the blur from showing after /reload
-    if (
-      playerBlinkProps.lastUsed === 0 &&
-      playerBlinkProps.blinkTime === blinkProps.notBlinkingLifetime
-    )
-      resetBlur(player);
   });
 });
 

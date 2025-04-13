@@ -8,5 +8,7 @@
   "$iwnt:blink_update_string": "iwnt_blink_",
 
   "$iwnt:blur_visible_name": "iwnt_blur",
-  "$iwnt:blur_update_string": "iwnt_blur_"
+  "$iwnt:blur_update_string": "iwnt_blur_",
+
+  "$iwnt:randomUselessItem_flag": "\n§5§oRUI:flag"
 }
