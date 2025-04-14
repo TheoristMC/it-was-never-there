@@ -7,7 +7,7 @@
         "value": [
           {
             "binding_type": "view",
-            "source_property_name": "((#text - $iwnt:blink_visible_name - $iwnt:blur_visible_name) = #text)",
+            "source_property_name": "((#text - $iwnt_blink_visible_name - $iwnt_blur_visible_name - $iwnt_msg_popup_visible_name - $iwnt_msg_popup_update_name) = #text)",
             "target_property_name": "#visible"
           }
         ]
@@ -22,13 +22,21 @@
     ],
     "controls": [
       {
-        "blink_mechanic_factory@iwnt_blink_mechanic.iwnt_blink_factory": {}
+        "blink_mechanic_factory@iwnt_blink_mechanic.iwnt_blink_factory": {
+          "layer": 1 // Above the message pop-up factory
+        }
       },
       {
         "iwnt_blink_data_control@iwnt_blink_mechanic.iwnt_blink_data_control": {}
       },
       {
         "blur_mechanic_image@iwnt_blink_mechanic.iwnt_blur_image": {}
+      },
+      {
+        "iwnt_msg_popup_factory@iwnt_msg_popup_mechanic.iwnt_msg_popup_factory": {}
+      },
+      {
+        "iwnt_msg_popup_data_control@iwnt_msg_popup_mechanic.iwnt_msg_popup_data_control": {}
       }
     ],
     "bindings": [

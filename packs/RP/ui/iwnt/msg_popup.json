@@ -1,0 +1,111 @@
+{
+  "namespace": "iwnt_msg_popup_mechanic",
+  "msg_popup_mechanic_appear": {
+    "anim_type": "alpha",
+    "easing": "linear",
+    "from": 0.0,
+    "to": 0.75,
+    "duration": 0.85
+  },
+  "msg_popup_mechanic_wait": {
+    "anim_type": "wait",
+    "duration": 2.35,
+    "next": "@iwnt_msg_popup_mechanic.msg_popup_mechanic_disappear"
+  },
+  "msg_popup_mechanic_disappear": {
+    "anim_type": "alpha",
+    "easing": "linear",
+    "from": 0.75,
+    "to": 0.0,
+    "duration": 0.85,
+    "destroy_at_end": "msg_popup_mechanic"
+  },
+  "msg_popup_mechanic": {
+    "type": "label",
+    "text": "#text",
+    "font_size": "large",
+    "property_bag": {
+      "#data_prefix": "$iwnt_msg_popup_update_string",
+      "#offset_1": [
+        64,
+        57
+      ],
+      "#offset_2": [
+        58,
+        -96
+      ],
+      "#offset_3": [
+        -84,
+        65
+      ],
+      "#offset_4": [
+        -74,
+        54
+      ],
+      "#offset_5": [
+        40,
+        -10
+      ]
+    },
+    "anims": [
+      "@iwnt_msg_popup_mechanic.msg_popup_mechanic_appear",
+      "@iwnt_msg_popup_mechanic.msg_popup_mechanic_wait"
+    ],
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_control_name": "iwnt_msg_popup_data_control",
+        "source_property_name": "#preserved_text",
+        "target_property_name": "#preserved_text"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(#preserved_text - (#data_prefix + ':'))",
+        "target_property_name": "#offset_type"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "('#offset_' + #offset_type)",
+        "target_property_name": "#offset"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(#preserved_text - (#data_prefix + ':' + #offset_type + ':'))",
+        "target_property_name": "#text"
+      }
+    ]
+  },
+  "iwnt_msg_popup_factory": {
+    "type": "collection_panel",
+    "factory": {
+      "name": "iwnt_msg_popup_factory",
+      "control_name": "msg_popup_mechanic@iwnt_msg_popup_mechanic.msg_popup_mechanic"
+    },
+    "bindings": [
+      {
+        "binding_type": "view",
+        "source_control_name": "iwnt_msg_popup_data_control",
+        "source_property_name": "(not (#preserved_text = $iwnt_msg_popup_factory_length) * not (#preserved_text = ''))",
+        "target_property_name": "#collection_length"
+      }
+    ]
+  },
+  "iwnt_msg_popup_data_control": {
+    "type": "panel",
+    "bindings": [
+      {
+        "binding_name": "#hud_title_text_string"
+      },
+      {
+        "binding_name": "#hud_title_text_string",
+        "binding_name_override": "#preserved_text",
+        "binding_condition": "visibility_changed"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $iwnt_msg_popup_update_string) = #hud_title_text_string))",
+        "target_property_name": "#visible"
+      }
+    ]
+  }
+}

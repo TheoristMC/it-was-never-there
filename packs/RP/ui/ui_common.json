@@ -9,7 +9,7 @@
       },
       {
         "binding_type": "view",
-        "source_property_name": "(#default_hover_text - $iwnt:randomUselessItem_flag)",
+        "source_property_name": "(#default_hover_text - $iwnt_randomUselessItem_flag)",
         "target_property_name": "#hover_text"
       }
     ]
@@ -19,7 +19,7 @@
     "bindings": [
       {
         "binding_type": "view",
-        "source_property_name": "(#selected_hover_text - $iwnt:randomUselessItem_flag)",
+        "source_property_name": "(#selected_hover_text - $iwnt_randomUselessItem_flag)",
         "target_property_name": "#text"
       }
     ]

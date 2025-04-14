@@ -86,7 +86,7 @@
       {
         "binding_type": "view",
         "source_control_name": "iwnt_blink_data_control",
-        "source_property_name": "((#preserved_text = $iwnt:blink_factory_length) * 1)",
+        "source_property_name": "((#preserved_text = $iwnt_blink_factory_length) * 1)",
         "target_property_name": "#collection_length",
         "resolve_sibling_scope": true
       }
@@ -105,7 +105,7 @@
       },
       {
         "binding_type": "view",
-        "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $iwnt:blink_update_string) = #hud_title_text_string))",
+        "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $iwnt_blink_update_string) = #hud_title_text_string))",
         "target_property_name": "#visible"
       }
     ]
@@ -132,7 +132,7 @@
             },
             {
               "binding_type": "view",
-              "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $iwnt:blur_update_string) = #hud_title_text_string))",
+              "source_property_name": "(not (#hud_title_text_string = #preserved_text) and not ((#hud_title_text_string - $iwnt_blur_update_string) = #hud_title_text_string))",
               "target_property_name": "#visible"
             }
           ]
@@ -151,12 +151,12 @@
       },
       {
         "binding_type": "view",
-        "source_property_name": "((#preserved_text - $iwnt:blur_update_string) + 0)",
+        "source_property_name": "((#preserved_text - $iwnt_blur_update_string) + 0)",
         "target_property_name": "#dividend"
       },
       {
         "binding_type": "view",
-        "source_property_name": "((#preserved_text - ($iwnt:blur_update_string + #dividend + '_')) + 0)",
+        "source_property_name": "((#preserved_text - ($iwnt_blur_update_string + #dividend + '_')) + 0)",
         "target_property_name": "#divisor"
       },
       {

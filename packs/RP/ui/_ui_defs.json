@@ -1,5 +1,6 @@
 {
   "ui_defs": [
-    "ui/iwnt/blink_mechanic.json"
+    "ui/iwnt/blink_mechanic.json",
+    "ui/iwnt/msg_popup.json"
   ]
 }
