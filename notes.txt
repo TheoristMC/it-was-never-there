@@ -3,3 +3,7 @@ Needs fixing:
 - After dying/sleeping, the blur doesn't reset. (FIXED)
 - Changing between gamemodes doesn't reset blur. (FIXED)
 - Fix blink not resetting after /reload. (FIXED)
+
+Needs development:
+
+- Offset type can also not be the same as always like the random messages.

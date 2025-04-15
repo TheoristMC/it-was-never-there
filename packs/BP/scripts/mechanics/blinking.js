@@ -125,3 +125,5 @@ world.afterEvents.itemUse.subscribe((data) => {
 
   if (itemStack.typeId === "minecraft:compass") playerBlink(source);
 });
+
+export { getPlayerBlinkProps };

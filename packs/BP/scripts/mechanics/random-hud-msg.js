@@ -34,30 +34,6 @@ function randomMsgPopup(player) {
   const randomMessage = getRandomElementInArray(filteredMessages);
 
   const randomOffsetType = getRandomInt(1, 5);
-  /*
-    LIST OF ALL OFFSETS: (Can be changed on ui/iwnt/msg_popup,json)
-
-    "#offset_1": [
-      64,
-      57
-    ],
-    "#offset_2": [
-      58,
-      -96
-    ],
-    "#offset_3": [
-      -84,
-      65
-    ],
-    "#offset_4": [
-      -74,
-      54
-    ],
-    "#offset_5": [
-      40,
-      -10
-    ]
-  */
 
   player.onScreenDisplay.setTitle(
     `iwnt_msg:${randomOffsetType}:${randomMessage}`
@@ -78,11 +54,11 @@ function randomMsgPopup(player) {
   randomHUDMsgProps.lastMessageShown.set(player.id, lastMessages);
 }
 
-const tickSelected = generateRandomTick(5, 12);
-console.warn(`${tickSelected / 20} seconds is selected for Random Message Popup`);
+const tickSelected = generateRandomTick(5, 7);
+console.warn(
+  `${tickSelected / 20} seconds is selected for Random Message Popup`
+);
 
 system.runInterval(() => {
-  world.getAllPlayers().forEach((player) => {
-    randomMsgPopup(player);
-  });
+  world.getAllPlayers().forEach((player) => randomMsgPopup(player));
 }, tickSelected);

@@ -86,7 +86,7 @@
       {
         "binding_type": "view",
         "source_control_name": "iwnt_blink_data_control",
-        "source_property_name": "((#preserved_text = $iwnt_blink_factory_length) * 1)",
+        "source_property_name": "((#preserved_text = $iwnt_blink_factory_length) * not (#preserved_text = ''))",
         "target_property_name": "#collection_length",
         "resolve_sibling_scope": true
       }
